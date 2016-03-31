@@ -20,7 +20,7 @@ public:
 	HuffmanTree(std::string &fileName);
 	~HuffmanTree();
 
-	void addNodeToTree(HuffmanNode node);
+	void printCodes(HuffmanNode* node, std::string str);
 };
 
 #endif // HUFFMANTREE_H

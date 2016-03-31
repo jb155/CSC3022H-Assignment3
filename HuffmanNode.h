@@ -23,12 +23,9 @@ public:
 };
 struct Compare
 {
-	bool operator()(const HuffmanNode& a, const HuffmanNode& b) const{
-		if (a.freq < b.freq){ 
-			return true; // or > if the algorithm requires that ordering
-		}else{
-			return false;
-		}
-	}
+	/*bool operator()(const HuffmanNode& a, const HuffmanNode& b) const{
+		return (a.freq > b.freq);
+	}*/
+	bool operator()(const HuffmanNode* lhs, const HuffmanNode* rhs) const { return lhs->freq > rhs->freq; }
 };
 #endif // HUFFMANNODE_H

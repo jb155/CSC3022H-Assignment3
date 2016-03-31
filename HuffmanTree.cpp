@@ -61,8 +61,16 @@ void HuffmanTree::generateTree(std::priority_queue<HuffmanNode*, std::vector<Huf
 	root = std::shared_ptr<HuffmanNode> (minHeap.top());
 }
 
-void addNodeToTree(HuffmanNode node){
-	
+// Prints huffman codes from the root of Huffman Tree.
+void printCodes(HuffmanNode* node, std::string str){
+    if (!node)
+        return;
+ 
+    if (node->letter != '$')
+        std::cout << node->letter << ": " << str << "\n";
+ 
+    printCodes(&*(node->leftNode), str + "0");
+    printCodes(&*(node->rightNode), str + "1");
 }
 //
 HuffmanTree::HuffmanTree()
@@ -76,6 +84,8 @@ HuffmanTree::HuffmanTree(std::string &fileName)
 	std::unordered_map <char, int> unorderedMap = createUnorderedMap(fileString);
 	std::priority_queue<HuffmanNode*, std::vector<HuffmanNode*>, Compare> orderedNodes = createOrderedNodes(unorderedMap);
 	generateTree(orderedNodes);
+	
+	printCodes(&*root,"");
 }
 
 HuffmanTree::~HuffmanTree()
