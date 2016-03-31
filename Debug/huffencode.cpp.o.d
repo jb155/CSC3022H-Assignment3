@@ -1,5 +1,5 @@
-Debug/huffencode.cpp.o: huffencode.cpp HuffmanNode.h HuffmanTree.h
-
-HuffmanNode.h:
+Debug/huffencode.cpp.o: huffencode.cpp HuffmanTree.h HuffmanNode.h
 
 HuffmanTree.h:
+
+HuffmanNode.h:

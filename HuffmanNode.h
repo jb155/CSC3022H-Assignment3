@@ -6,17 +6,29 @@
 class HuffmanNode
 {
 private:
-	char letter;
-	int freq;
+	//char letter;
+	//int freq;
 public:
-	std::shared_ptr<HuffmanNode> leftNode, rightNode, parentNode;
+	char letter;
+	int freq = 0;
+
+	std::shared_ptr<HuffmanNode> leftNode;
+	std::shared_ptr<HuffmanNode> rightNode;
+	//std::shared_ptr<HuffmanNode> parentNode;
 	
 	HuffmanNode();
-	HuffmanNode(char a);
+	HuffmanNode(char a, int b);
 	~HuffmanNode();
 
-	int getFreq(void){return freq;};
-	void addFreq(void);
 };
-
+struct Compare
+{
+	bool operator()(const HuffmanNode& a, const HuffmanNode& b) const{
+		if (a.freq < b.freq){ 
+			return true; // or > if the algorithm requires that ordering
+		}else{
+			return false;
+		}
+	}
+};
 #endif // HUFFMANNODE_H
