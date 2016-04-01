@@ -8,10 +8,10 @@
 class HuffmanTree
 {
 private:
-	std::string readFromFile(std::string &fileName);//1st
-	std::unordered_map <char, int> createUnorderedMap(std::string &str);//2nd
+	static std::unordered_map<char, int> createCharacterMap(std::string inFileName, std::vector<std::string> *inputStrings);
 	std::priority_queue<HuffmanNode*, std::vector<HuffmanNode*>, Compare> createOrderedNodes(std::unordered_map <char, int> &map);//3rd
 	void generateTree(std::priority_queue<HuffmanNode*, std::vector<HuffmanNode*>, Compare> &orderedNodeQueue);
+	void saveCodesToFile(std::string outFileName, std::vector<std::string> inputStrings);
 	struct HuffmanNode *left, *right, *top;
 public:
 	std::shared_ptr<HuffmanNode> root;
@@ -20,7 +20,7 @@ public:
 	HuffmanTree(std::string &fileName);
 	~HuffmanTree();
 
-	void printCodes(HuffmanNode* node, std::string str);
+	void printCodes(std::shared_ptr<HuffmanNode> parent, std::string bitCode);
 };
 
 #endif // HUFFMANTREE_H

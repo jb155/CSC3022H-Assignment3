@@ -1,29 +1,31 @@
 #include <fstream>
+#include <iostream>
 #include <queue>
 #include <vector>
 
 #include "HuffmanNode.h"
 #include "HuffmanTree.h"
 
-std::string HuffmanTree::readFromFile(std::string &fileName){
-	//Reads entire file into a single line
-	std::ifstream file(fileName);
-	std::string str;
-	std::string file_contents;
-	while (std::getline(file, str))
-	{
-	  file_contents += str;
-	  file_contents.push_back('\n');
-	}
-	
-	return str;
-}
+std::unordered_map<char, int> HuffmanTree::createCharacterMap(std::string inFileName, std::vector<std::string> *inputStrings) {
+	std::unordered_map<char, int> unorderedMap;
+	std::ifstream inFile(inFileName);
+	std::string line;
 
-std::unordered_map <char, int> HuffmanTree::createUnorderedMap(std::string &str){
-	//Dump char's into unordered_map unorderedMap
-	std::unordered_map <char, int> unorderedMap;
-	for (int i = 0; i < str.length();i++){
-		unorderedMap[str[i]] += 1;				//This would mean that if you tipe "Hello" and you look at the key 'l' you will find 2 ... 2 occurences of ll
+	// Read in and count the frequency of each character
+	if (inFile.is_open()) {
+		while (getline(inFile, line)) {
+			inputStrings->push_back(line);
+			for (char letter: line) {
+				if (unorderedMap.find(letter) != unorderedMap.end()) {
+					unorderedMap.at(letter) += 1;
+				} else {
+					unorderedMap.insert({letter, 1});
+				}
+			}
+		}
+		inFile.close();
+	} else {
+		std::cout << "Can't open file." << std::endl;
 	}
 	return unorderedMap;
 }
@@ -62,30 +64,80 @@ void HuffmanTree::generateTree(std::priority_queue<HuffmanNode*, std::vector<Huf
 }
 
 // Prints huffman codes from the root of Huffman Tree.
-void printCodes(HuffmanNode* node, std::string str){
-    if (!node)
-        return;
+void HuffmanTree::printCodes(std::shared_ptr<HuffmanNode> parent, std::string bitCode) {
+	if (!parent)
+		return;
  
-    if (node->letter != '$')
-        std::cout << node->letter << ": " << str << "\n";
+	if (parent->letter != '$')
+		std::cout << parent->letter << ": " << bitCode << "\n";
  
-    printCodes(&*(node->leftNode), str + "0");
-    printCodes(&*(node->rightNode), str + "1");
+	printCodes((parent->leftNode), bitCode + "0");
+	printCodes((parent->rightNode), bitCode + "1");
 }
-//
+
+void HuffmanTree::saveCodesToFile(std::string outFileName, std::vector<std::string> inputStrings){
+	// Write out the "binary" string of the input
+	std::ofstream outFile(outFileName);
+	if (outFile.is_open()) {
+		for (auto inputString : inputStrings) {
+			for (auto character : inputString) {
+				//outFile << codeTable[character];
+			}
+		outFile << std::endl;
+		}
+		outFile.close();
+	}
+	
+	/*// Write out the "binary" string of the input
+    ofstream outFile(outputFileName);
+    if (outFile.is_open()) {
+        for (auto inputString : inputStrings) {
+            for (auto character : inputString) {
+                outFile << codeTable[character];
+            }
+            outFile << endl;
+        }
+        outFile.close();
+    }
+
+    // Construct the file name for the header file
+    size_t index = outputFileName.find('.');
+    if (index != string::npos) {
+        outputFileName = outputFileName.substr(0, index) + ".hdr";
+    }
+
+    // Write out the bit code table
+    outFile.open(outputFileName);
+    if (outFile.is_open()) {
+        outFile << codeTable.size() << endl;
+        for (auto pair : codeTable) {
+            outFile << pair.first << '\t' << pair.second << endl;
+        }
+        outFile.close();
+    }*/
+
+}
+
 HuffmanTree::HuffmanTree()
 {
 }
 
 HuffmanTree::HuffmanTree(std::string &fileName)
 {
+	std::cout << "0" << std::endl;
+	std::vector<std::string> inStrings;
 	
-	std::string fileString = readFromFile(fileName);
-	std::unordered_map <char, int> unorderedMap = createUnorderedMap(fileString);
+	std::cout << "1" << std::endl;
+	std::unordered_map<char, int> unorderedMap = HuffmanTree::createCharacterMap(fileName, &inStrings);
+	
+	std::cout << "2" << std::endl;
 	std::priority_queue<HuffmanNode*, std::vector<HuffmanNode*>, Compare> orderedNodes = createOrderedNodes(unorderedMap);
+	
+	std::cout << "3" << std::endl;
 	generateTree(orderedNodes);
 	
-	printCodes(&*root,"");
+	std::cout << "4" << std::endl;
+	printCodes(root,"");
 }
 
 HuffmanTree::~HuffmanTree()
