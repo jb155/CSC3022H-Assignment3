@@ -2,12 +2,12 @@
 #include <iostream>
 #include <queue>
 #include <vector>
+#include <numeric>
 
 #include "HuffmanNode.h"
 #include "HuffmanTree.h"
 
-std::unordered_map<char, int> HuffmanTree::createCharacterMap(std::string inFileName, std::vector<std::string> *inputStrings) {
-	std::unordered_map<char, int> unorderedMap;
+void  HuffmanTree::createCharacterMap(std::string inFileName, std::vector<std::string> *inputStrings) {
 	std::ifstream inFile(inFileName);
 	std::string line;
 
@@ -27,7 +27,6 @@ std::unordered_map<char, int> HuffmanTree::createCharacterMap(std::string inFile
 	} else {
 		std::cout << "Can't open file." << std::endl;
 	}
-	return unorderedMap;
 }
 
 std::priority_queue<HuffmanNode*, std::vector<HuffmanNode*>, Compare> HuffmanTree::createOrderedNodes(std::unordered_map <char, int> &map){
@@ -68,54 +67,42 @@ void HuffmanTree::printCodes(std::shared_ptr<HuffmanNode> parent, std::string bi
 	if (!parent)
 		return;
  
-	if (parent->letter != '$')
-		std::cout << parent->letter << ": " << bitCode << "\n";
- 
+	if (parent->letter != '$'){
+		bitCodes += parent->letter + ": " + bitCode + "\n";
+		codeTable.insert({parent->letter, bitCode});
+	}
 	printCodes((parent->leftNode), bitCode + "0");
 	printCodes((parent->rightNode), bitCode + "1");
 }
 
-void HuffmanTree::saveCodesToFile(std::string outFileName, std::vector<std::string> inputStrings){
+void HuffmanTree::saveCodesToFile(std::string outFileName){
 	// Write out the "binary" string of the input
-	std::ofstream outFile(outFileName);
+	std::ofstream outFile(outFileName, std::ios::out | std::ios::binary);
+	if (outFile.good()) {
+		std::string s;
+		s = std::accumulate(begin(inStrings), end(inStrings), s);
+		outFile.write(s.c_str(), s.size());
+		outFile.close();
+	}
+	else {
+		std::cout << "file error write" << std::endl;
+	}
+	
+	// Construct the file name for the header file
+	size_t index = outFileName.find('.');
+	if (index != std::string::npos) {
+		outFileName = outFileName.substr(0, index) + ".hdr";
+	}
+	// Write out the bit code table
+	outFile.open(outFileName);
 	if (outFile.is_open()) {
-		for (auto inputString : inputStrings) {
-			for (auto character : inputString) {
-				//outFile << codeTable[character];
-			}
-		outFile << std::endl;
+		outFile << codeTable.size() << std::endl;
+		for (auto pair : codeTable) {
+			outFile << pair.first << '\t' << pair.second << std::endl;
+			std::cout << pair.first << '\t' << pair.second << std::endl;
 		}
 		outFile.close();
 	}
-	
-	/*// Write out the "binary" string of the input
-    ofstream outFile(outputFileName);
-    if (outFile.is_open()) {
-        for (auto inputString : inputStrings) {
-            for (auto character : inputString) {
-                outFile << codeTable[character];
-            }
-            outFile << endl;
-        }
-        outFile.close();
-    }
-
-    // Construct the file name for the header file
-    size_t index = outputFileName.find('.');
-    if (index != string::npos) {
-        outputFileName = outputFileName.substr(0, index) + ".hdr";
-    }
-
-    // Write out the bit code table
-    outFile.open(outputFileName);
-    if (outFile.is_open()) {
-        outFile << codeTable.size() << endl;
-        for (auto pair : codeTable) {
-            outFile << pair.first << '\t' << pair.second << endl;
-        }
-        outFile.close();
-    }*/
-
 }
 
 HuffmanTree::HuffmanTree()
@@ -124,20 +111,15 @@ HuffmanTree::HuffmanTree()
 
 HuffmanTree::HuffmanTree(std::string &fileName)
 {
-	std::cout << "0" << std::endl;
-	std::vector<std::string> inStrings;
+	HuffmanTree::createCharacterMap(fileName, &inStrings);
 	
-	std::cout << "1" << std::endl;
-	std::unordered_map<char, int> unorderedMap = HuffmanTree::createCharacterMap(fileName, &inStrings);
+	orderedNodes = createOrderedNodes(unorderedMap);
 	
-	std::cout << "2" << std::endl;
-	std::priority_queue<HuffmanNode*, std::vector<HuffmanNode*>, Compare> orderedNodes = createOrderedNodes(unorderedMap);
-	
-	std::cout << "3" << std::endl;
 	generateTree(orderedNodes);
 	
-	std::cout << "4" << std::endl;
 	printCodes(root,"");
+	
+	saveCodesToFile(fileName);
 }
 
 HuffmanTree::~HuffmanTree()

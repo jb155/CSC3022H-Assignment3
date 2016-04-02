@@ -8,11 +8,16 @@
 class HuffmanTree
 {
 private:
-	static std::unordered_map<char, int> createCharacterMap(std::string inFileName, std::vector<std::string> *inputStrings);
+	void createCharacterMap(std::string inFileName, std::vector<std::string> *inputStrings);
 	std::priority_queue<HuffmanNode*, std::vector<HuffmanNode*>, Compare> createOrderedNodes(std::unordered_map <char, int> &map);//3rd
 	void generateTree(std::priority_queue<HuffmanNode*, std::vector<HuffmanNode*>, Compare> &orderedNodeQueue);
-	void saveCodesToFile(std::string outFileName, std::vector<std::string> inputStrings);
 	struct HuffmanNode *left, *right, *top;
+	
+	std::string bitCodes = "";
+	std::vector<std::string> inStrings;
+	std::unordered_map<char, int> unorderedMap;
+	std::priority_queue<HuffmanNode*, std::vector<HuffmanNode*>, Compare> orderedNodes;
+	std::unordered_map<char, std::string> codeTable;
 public:
 	std::shared_ptr<HuffmanNode> root;
 
@@ -21,6 +26,10 @@ public:
 	~HuffmanTree();
 
 	void printCodes(std::shared_ptr<HuffmanNode> parent, std::string bitCode);
+	void saveCodesToFile(std::string outFileName);
+	
+	std::unordered_map<char, int> getUnorderedMap(){ return unorderedMap; }
+	std::vector <std::string> getInStrings(){return inStrings;}
 };
 
 #endif // HUFFMANTREE_H
