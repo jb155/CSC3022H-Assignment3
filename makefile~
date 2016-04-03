@@ -1,19 +1,14 @@
-CC=g++
-CCFLAGS=-std=c++11
-LIBS=-lm -lX
-
-HuffmanNode.o: HuffmanNode.cpp HuffmanNode.h
-	$(CC) $(CCFLAGS) HuffenNode.cpp -c
-HuffmanTree.o: HuffmanTree.cpp HuffmanTree.h HuffmanNode.h
-	$(CC) $(CCFLAGS) HuffmanTree.cpp -c
+huffencode: huffencode.o HuffmanTree.o
+	g++ -o huffencode huffencode.o HuffmanTree.o -std=c++11
 huffencode.o: huffencode.cpp HuffmanTree.h
-	$(CC) $(CCFLAGS) huffencode.cpp
-
-huffencode: HuffmanTree.o HuffmanNode.o huffencode.o HuffmanTree.h
-	$(CC) $(CCFLAGS) HuffmanTree.o HuffmanNode.o huffencode.o -o huffencode $(LIBS)
+	g++ -c -o huffencode.o huffencode.cpp -std=c++11
+HuffmanTree.o: HuffmanTree.cpp HuffmanTree.h HuffmanNode.h
+	g++ -c -o HuffmanTree.o HuffmanTree.cpp -std=c++11
+HuffmanNode.o: HuffmanNode.cpp HuffmanNode.h
+	g++ -c -o HuffmanNode.o HuffmanNode.cpp -std=c++11
 
 run:
 	./huffencode
-	
+
 clean:
 	rm -Rf *.o ./huffencode

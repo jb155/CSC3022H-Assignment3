@@ -3,7 +3,7 @@
 ## any manual changes will be erased      
 ##
 ## Debug
-ProjectName            :=Assignment2
+ProjectName            :=Assignment3
 ConfigurationName      :=Debug
 WorkspacePath          :=/home/jacques/Documents/Assignment2
 ProjectPath            :=/home/jacques/Documents/Assignment2/Assignment2
@@ -32,7 +32,7 @@ Preprocessors          :=
 ObjectSwitch           :=-o 
 ArchiveOutputSwitch    := 
 PreprocessOnlySwitch   :=-E
-ObjectsFileList        :="Assignment2.txt"
+ObjectsFileList        :="Assignment3.txt"
 PCHCompileFlags        :=
 MakeDirCommand         :=mkdir -p
 LinkOptions            :=  

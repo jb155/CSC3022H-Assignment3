@@ -3,6 +3,7 @@
 #include <string>
 #include <memory>
 #include <iostream>
+#include <iostream>
 class HuffmanNode
 {
 private:
@@ -10,7 +11,7 @@ private:
 	//int freq;
 public:
 	char letter;
-	int freq = 0;
+	int freq;
 
 	std::shared_ptr<HuffmanNode> leftNode;
 	std::shared_ptr<HuffmanNode> rightNode;

@@ -1,0 +1,13 @@
+CC=g++
+FLAGS=-std=c++11
+TEST_SOURCES=../HuffmanNode.cpp ../HuffmanTree.cpp UnitTesting.cpp
+TEST_OBJECTS=$(TEST_SOURCES:.cpp=.o)
+
+default: $(OBJECTS)
+	$(CC) $(TEST_SOURCES) -o build/Tests/test $(FLAGS)
+
+run:
+	./huffencode
+
+clean:
+	rm -Rf *.o ./huffencode

@@ -5,6 +5,7 @@
 #include <queue>
 #include <vector>
 #include "HuffmanNode.h"
+
 class HuffmanTree
 {
 private:
@@ -30,6 +31,8 @@ public:
 	
 	std::unordered_map<char, int> getUnorderedMap(){ return unorderedMap; }
 	std::vector <std::string> getInStrings(){return inStrings;}
+	std::unordered_map<char, std::string> getCodeTable(){return codeTable;}
+	std::priority_queue<HuffmanNode*, std::vector<HuffmanNode*>, Compare> getOrderedNodes(){return orderedNodes;}
 };
 
 #endif // HUFFMANTREE_H

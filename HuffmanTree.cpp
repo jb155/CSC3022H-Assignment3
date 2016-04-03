@@ -85,7 +85,7 @@ void HuffmanTree::saveCodesToFile(std::string outFileName){
 		outFile.close();
 	}
 	else {
-		std::cout << "file error write" << std::endl;
+		std::cout << "file write error" << std::endl;
 	}
 	
 	// Construct the file name for the header file
@@ -124,5 +124,6 @@ HuffmanTree::HuffmanTree(std::string &fileName)
 
 HuffmanTree::~HuffmanTree()
 {
+	root = nullptr;
 }
 

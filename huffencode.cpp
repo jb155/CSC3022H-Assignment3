@@ -1,5 +1,4 @@
-#include <HuffmanTree.h>
-
+#include "HuffmanTree.h"
 
 //Main
 int main(int argc, char **argv)
@@ -13,6 +12,4 @@ int main(int argc, char **argv)
 	}else{
 		std::cout << "Please input correct arguments example: huffencode <inputFile><output file>"<<std::endl;
 	}
-	//std::string inString = "test.txt";
-	//HuffmanTree hufmanTree(inString);
 }

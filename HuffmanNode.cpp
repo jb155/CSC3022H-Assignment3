@@ -1,13 +1,14 @@
 #include "HuffmanNode.h"
 HuffmanNode::HuffmanNode()
 {
+	freq = 0;
 }
 
 HuffmanNode::HuffmanNode(char a, int b)
 {
-	this->leftNode = this->rightNode = NULL;
-	this->letter = a;
-	this->freq = b;
+	leftNode = rightNode = NULL;
+	letter = a;
+	freq = b;
 }
 
 HuffmanNode::~HuffmanNode()

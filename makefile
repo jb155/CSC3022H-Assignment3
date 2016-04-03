@@ -1,16 +1,30 @@
+.SUFFIXES:
+.SUFFIXES: .cpp .o
+
 CC=g++
-CCFLAGS=-std=c++11
-LIBS=-lm -lX
+FLAGS=-std=c++11
+SOURCES=HuffmanNode.cpp HuffmanTree.cpp huffencode.cpp
+OBJECTS=$(SOURCES:.cpp=.o)
 
-HuffmanNode.o: HuffmanNode.cpp HuffmanNode.h
-	$(CC) $(CCFLAGS) HuffenNode.cpp -c
-HuffmanTree.o: HuffmanTree.cpp HuffmanTree.h HuffmanNode.h
-	$(CC) $(CCFLAGS) HuffmanTree.cpp -c
-huffencode.o: huffencode.cpp HuffmanTree.h
-	$(CC) $(CCFLAGS) huffencode.cpp
+TEST_SOURCES=HuffmanNode.cpp HuffmanTree.cpp Test/UnitTesting.cpp
+TEST_OBJECTS=$(TEST_SOURCES:.cpp=.o)
 
-huffencode: HuffmanTree.o HuffmanNode.o huffencode.o HuffmanTree.h
-	$(CC) $(CCFLAGS) HuffmanTree.o HuffmanNode.o huffencode.o -o huffencode $(LIBS)
+EXE_NAME=huffencode
+
+default: $(OBJECTS)
+	$(CC) $(SOURCES) -o build/$(EXE_NAME) $(FLAGS)
+
+.cpp.o:
+	$(CC) -c $< -o $@ $(FLAGS)
 
 clean:
-	rm -Rf *.o ./huffencode
+	rm -f $(OBJECTS) build/$(EXE_NAME) build/*.z build/*.hdr build/Tests/test
+
+run: default
+	cd ./build && ./$(EXE_NAME) $(ARGS)
+
+tests: $(OBJECTS)
+	$(CC) $(TEST_SOURCES) -o Test/test $(FLAGS)
+
+run-tests: tests
+	cd ./build/Tests && ./test
